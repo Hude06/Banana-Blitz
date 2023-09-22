@@ -37,6 +37,11 @@
             background-color: red;
         }
     </Style>
+    <script>
+        function Import(file) {
+            document.head.appendChild((($, s)=>{$.src=s;return $})(document.createElement('script'), file))
+        }
+    </script>
     <script src="Game.js"></script>
 </body>
 </html>

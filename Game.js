@@ -1,4 +1,4 @@
-import {Rect} from "./RectUtils.js"
+Import("./RectUtils.js");
 let canvas = document.getElementById("canvas")
 let ctx = canvas.getContext("2d")
 let currentKey = new Map();

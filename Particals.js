@@ -1,4 +1,4 @@
-export class ParticleSource {
+class ParticleSource {
     constructor() {
         this.parts = [];
         this.particles_enabled = true;

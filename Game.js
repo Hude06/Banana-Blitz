@@ -130,7 +130,7 @@ function keyboardInit() {
 let bullets = []
 let hotSauce = new SpriteOBJ("HotSauceManLeft.png","HotSauceManRight.png","HotSauceManBackRightLeft.png","HotSauceManBackRightRight.png")
 let Banana = new SpriteOBJ("Player.png","PlayerFrontRight.png","PlayBackLeft.png","PlayBackRight.png")
-let player = new Player(hotSauce);
+let player = new Player(Banana);
 let AllPlayers = [player]
 
 

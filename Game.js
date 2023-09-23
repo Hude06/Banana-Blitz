@@ -50,13 +50,18 @@ class Player {
         this.sprite = SpriteOBJ
         this.bounds = new Rect(10,10,64,64)
         this.speed = 2;
-        this.health = 1;
+        this.health = 3;
         this.direction = "left"
         this.prevDirection = "left"
         this.type = type;
+        this.heart = new Image();
+        this.heart.src = "./Assets/BananaHeart.png"
     }
     draw() {
         ctx.imageSmoothingEnabled = false;
+        for (let i = 0; i < this.health; i++) {
+            ctx.drawImage(this.heart, 10 + (i*30),10,32,32)
+        }
         if (this.direction === "up") {
             console.log("run",this.prevDirection)
             if (this.prevDirection === "left") {

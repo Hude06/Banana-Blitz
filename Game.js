@@ -1,10 +1,9 @@
 import {Rect} from "./RectUtils.js"
-
 let canvas = document.getElementById("canvas")
 let ctx = canvas.getContext("2d")
 let currentKey = new Map();
 let navKey = new Map();
-
+let mode = "game"
 class SpriteOBJ {
     constructor(LeftSrc,RightSrc,BackLeft,BackRight) {
         this.imageLeft = new Image();
@@ -47,6 +46,7 @@ class Bullet {
 }
 class Player { 
     constructor(SpriteOBJ) {
+        this.original = SpriteOBJ
         this.sprite = SpriteOBJ
         this.bounds = new Rect(10,10,64,64)
         this.speed = 2;
@@ -107,6 +107,13 @@ class Player {
 
         }
     }
+    reset() {
+        this.sprite = this.original
+        this.bounds = new Rect(10,10,64,64)
+        this.speed = 2;
+        this.direction = "left"
+        this.prevDirection = "left"
+    }
 }
 function keyboardInit() {
     window.addEventListener("keydown", function (event) {
@@ -124,15 +131,21 @@ let bullets = []
 let hotSauce = new SpriteOBJ("HotSauceManLeft.png","HotSauceManRight.png","HotSauceManBackRightLeft.png","HotSauceManBackRightRight.png")
 let Banana = new SpriteOBJ("Player.png","PlayerFrontRight.png","PlayBackLeft.png","PlayBackRight.png")
 let player = new Player(hotSauce);
+let AllPlayers = [player]
+
+
 function loop() {
     ctx.clearRect(0,0,canvas.width,canvas.height)
-    player.draw();
-    player.update();
-    for (let i = 0; i < bullets.length; i++) {
-        bullets[i].draw();
-        bullets[i].update();
+    if (mode === "game") {
+        canvas.style.visibility = "visible"
+        player.draw();
+        player.update();
+        for (let i = 0; i < bullets.length; i++) {
+            bullets[i].draw();
+            bullets[i].update();
+        }
+        navKey.clear();
     }
-    navKey.clear();
     requestAnimationFrame(loop)
 }
 function init() {

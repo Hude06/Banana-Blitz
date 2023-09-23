@@ -79,15 +79,15 @@ class Player {
     }
     update() {
         if ( this.type == "Player1" ) {
-        if (currentKey.get("w") || currentKey.get("ArrowUp")) {
+        if (currentKey.get("w") || currentKey.get("w")) {
             this.bounds.y -= this.speed
             this.direction = "up"
         }
-        if (currentKey.get("s") || currentKey.get("ArrowDown")) {
+        if (currentKey.get("s") || currentKey.get("s")) {
             this.bounds.y += this.speed
             this.direction = "down"
         }
-        if (currentKey.get("a") || currentKey.get("ArrowLeft")) {
+        if (currentKey.get("a") || currentKey.get("a")) {
             this.bounds.x -= this.speed
             if (this.direction === "left" || this.direction === "right") {
                 this.prevDirection = this.direction;
@@ -95,7 +95,7 @@ class Player {
             }
             this.direction = "left"
         }
-        if (currentKey.get("d") || currentKey.get("ArrowRight")) {
+        if (currentKey.get("d") || currentKey.get("d")) {
             this.bounds.x += this.speed
             if (this.direction === "left" || this.direction === "right") {
                 this.prevDirection = this.direction;
@@ -109,15 +109,36 @@ class Player {
         }
     }
     if ( this.type == "Ai" ) {
-        if (currentKey.get("w") || currentKey.get("ArrowUp")) {
+            if (this.bounds.x < player.bounds.x ) {
+                this.bounds.x += 1;
+                this.direction = "right";
+            }
+            if (this.bounds.x > player.bounds.x ) {
+                this.bounds.x -= 1;
+                this.direction = "left";
+            }
+            if (this.bounds.y < player.bounds.y ) {
+                this.bounds.y += 1;
+                this.direction = "down";
+            }
+            if (this.bounds.y > player.bounds.y ) {
+                this.bounds.y -= 1;
+                this.direction = "up";
+            }
+            if (Math.floor(Math.random() * 100) === 13 ) {
+                bullets.push (new Bullet(this,this.direction))
+            }
+    }
+    if ( this.type == "Player2" ) {
+        if (currentKey.get("ArrowUp") || currentKey.get("ArrowUp")) {
             this.bounds.y -= this.speed
             this.direction = "up"
         }
-        if (currentKey.get("s") || currentKey.get("ArrowDown")) {
+        if (currentKey.get("ArrowDown") || currentKey.get("ArrowDown")) {
             this.bounds.y += this.speed
             this.direction = "down"
         }
-        if (currentKey.get("a") || currentKey.get("ArrowLeft")) {
+        if (currentKey.get("ArrowLeft") || currentKey.get("ArrowLeft")) {
             this.bounds.x -= this.speed
             if (this.direction === "left" || this.direction === "right") {
                 this.prevDirection = this.direction;
@@ -125,7 +146,7 @@ class Player {
             }
             this.direction = "left"
         }
-        if (currentKey.get("d") || currentKey.get("ArrowRight")) {
+        if (currentKey.get("ArrowRight") || currentKey.get("ArrowRight")) {
             this.bounds.x += this.speed
             if (this.direction === "left" || this.direction === "right") {
                 this.prevDirection = this.direction;

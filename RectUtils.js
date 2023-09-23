@@ -1,10 +1,10 @@
-export class Point {
+class Point {
 	constructor(x,y) {
 		this.x = x
 		this.y = y
 	}
 }
-export class Rect {
+class Rect {
 	constructor(x,y,w,h) {
 		this.w = w
 		this.h = h
@@ -42,11 +42,11 @@ export class Rect {
 	}
 }
 
-export function log(s) {
+function log(s) {
     console.log(s)
 
 }
-export function fillRect(x,y,w,h,color) {
+function fillRect(x,y,w,h,color) {
     ctx.fillStyle = color;
     ctx.fillRect(x,y,w,h);
 }

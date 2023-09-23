@@ -8,14 +8,14 @@ let navKey = new Map();
 class SpriteOBJ {
     constructor(LeftSrc,RightSrc,BackLeft,BackRight) {
         this.imageLeft = new Image();
-        this.imageLeft.src = LeftSrc;
+        this.imageLeft.src = "./Assets/" + LeftSrc;
         this.imageRight = new Image();
-        this.imageRight.src = RightSrc;
+        this.imageRight.src = "./Assets/" +RightSrc;
 
         this.imageBackLeft = new Image();
-        this.imageBackLeft.src = BackLeft;
+        this.imageBackLeft.src = "./Assets/" +BackLeft;
         this.imageBackRight = new Image();
-        this.imageBackRight.src = BackRight;
+        this.imageBackRight.src = "./Assets/" +BackRight;
     }
 }
 class Bullet {
@@ -121,8 +121,9 @@ function keyboardInit() {
     });
 }
 let bullets = []
-let Banana = new SpriteOBJ("./Assets/Player.png","./Assets/PlayerFrontRight.png","./Assets/PlayBackLeft.png","./Assets/PlayBackRight.png")
-let player = new Player(Banana);
+let hotSauce = new SpriteOBJ("HotSauceManLeft.png","HotSauceManRight.png","HotSauceManBackRightLeft.png","HotSauceManBackRightRight.png")
+let Banana = new SpriteOBJ("Player.png","PlayerFrontRight.png","PlayBackLeft.png","PlayBackRight.png")
+let player = new Player(hotSauce);
 function loop() {
     ctx.clearRect(0,0,canvas.width,canvas.height)
     player.draw();

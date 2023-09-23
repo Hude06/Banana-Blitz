@@ -88,12 +88,18 @@ class Player {
         }
         if (currentKey.get("a") || currentKey.get("ArrowLeft")) {
             this.bounds.x -= this.speed
-            this.prevDirection = this.direction;
+            if (this.direction === "left" || this.direction === "right") {
+                this.prevDirection = this.direction;
+
+            }
             this.direction = "left"
         }
         if (currentKey.get("d") || currentKey.get("ArrowRight")) {
             this.bounds.x += this.speed
-            this.prevDirection = this.direction;
+            if (this.direction === "left" || this.direction === "right") {
+                this.prevDirection = this.direction;
+
+            }
             this.direction = "right"
         }
         if (navKey.get(" ")) {

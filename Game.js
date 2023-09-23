@@ -50,6 +50,7 @@ class Player {
         this.sprite = SpriteOBJ
         this.bounds = new Rect(10,10,64,64)
         this.speed = 2;
+        this.health = 1;
         this.direction = "left"
         this.prevDirection = "left"
         this.type = type;

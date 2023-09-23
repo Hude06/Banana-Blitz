@@ -136,7 +136,10 @@ let AllPlayers = [player]
 
 function loop() {
     ctx.clearRect(0,0,canvas.width,canvas.height)
-    if (mode === "game") {
+    if ( mode == "menu" ) {
+        
+    }
+    if ( mode == "game" ) {
         canvas.style.visibility = "visible"
         player.draw();
         player.update();

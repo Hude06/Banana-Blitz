@@ -1,10 +1,10 @@
-class Point {
+export class Point {
 	constructor(x,y) {
 		this.x = x
 		this.y = y
 	}
 }
-class Rect {
+export class Rect {
 	constructor(x,y,w,h) {
 		this.w = w
 		this.h = h

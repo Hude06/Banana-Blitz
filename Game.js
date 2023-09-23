@@ -45,14 +45,14 @@ class Bullet {
     }
 }
 class Player { 
-    constructor(SpriteOBJ) {
+    constructor(SpriteOBJ, type) {
         this.original = SpriteOBJ
         this.sprite = SpriteOBJ
         this.bounds = new Rect(10,10,64,64)
         this.speed = 2;
         this.direction = "left"
         this.prevDirection = "left"
-
+        this.type = type;
     }
     draw() {
         ctx.imageSmoothingEnabled = false;
@@ -78,6 +78,7 @@ class Player {
         
     }
     update() {
+        if ( this.type == "Player1" ) {
         if (currentKey.get("w") || currentKey.get("ArrowUp")) {
             this.bounds.y -= this.speed
             this.direction = "up"
@@ -107,6 +108,37 @@ class Player {
 
         }
     }
+    if ( this.type == "Ai" ) {
+        if (currentKey.get("w") || currentKey.get("ArrowUp")) {
+            this.bounds.y -= this.speed
+            this.direction = "up"
+        }
+        if (currentKey.get("s") || currentKey.get("ArrowDown")) {
+            this.bounds.y += this.speed
+            this.direction = "down"
+        }
+        if (currentKey.get("a") || currentKey.get("ArrowLeft")) {
+            this.bounds.x -= this.speed
+            if (this.direction === "left" || this.direction === "right") {
+                this.prevDirection = this.direction;
+
+            }
+            this.direction = "left"
+        }
+        if (currentKey.get("d") || currentKey.get("ArrowRight")) {
+            this.bounds.x += this.speed
+            if (this.direction === "left" || this.direction === "right") {
+                this.prevDirection = this.direction;
+
+            }
+            this.direction = "right"
+        }
+        if (navKey.get(" ")) {
+            bullets.push (new Bullet(this,this.direction))
+
+        }
+    }
+    }
     reset() {
         this.sprite = this.original
         this.bounds = new Rect(10,10,64,64)
@@ -130,14 +162,14 @@ function keyboardInit() {
 let bullets = []
 let hotSauce = new SpriteOBJ("HotSauceManLeft.png","HotSauceManRight.png","HotSauceManBackRightLeft.png","HotSauceManBackRightRight.png")
 let Banana = new SpriteOBJ("Player.png","PlayerFrontRight.png","PlayBackLeft.png","PlayBackRight.png")
-let player = new Player(Banana);
+let Ai = new Player(hotSauce, "Ai");
+let player = new Player(Banana, "Player1");
 let AllPlayers = [player]
-
 
 function loop() {
     ctx.clearRect(0,0,canvas.width,canvas.height)
     if ( mode == "menu" ) {
-        
+
     }
     if ( mode == "game" ) {
         canvas.style.visibility = "visible"
@@ -147,6 +179,8 @@ function loop() {
             bullets[i].draw();
             bullets[i].update();
         }
+        Ai.draw();
+        Ai.update();
         navKey.clear();
     }
     requestAnimationFrame(loop)

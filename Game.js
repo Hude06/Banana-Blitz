@@ -6,11 +6,16 @@ let currentKey = new Map();
 let navKey = new Map();
 
 class SpriteOBJ {
-    constructor(LeftSrc,RightSrc) {
+    constructor(LeftSrc,RightSrc,BackLeft,BackRight) {
         this.imageLeft = new Image();
         this.imageLeft.src = LeftSrc;
         this.imageRight = new Image();
         this.imageRight.src = RightSrc;
+
+        this.imageBackLeft = new Image();
+        this.imageBackLeft.src = BackLeft;
+        this.imageBackRight = new Image();
+        this.imageBackRight.src = BackRight;
     }
 }
 class Bullet {
@@ -46,11 +51,23 @@ class Player {
         this.bounds = new Rect(10,10,64,64)
         this.speed = 2;
         this.direction = "left"
+        this.prevDirection = "left"
 
     }
     draw() {
         ctx.imageSmoothingEnabled = false;
-        if (this.direction === "left" || this.direction === "up") {
+        if (this.direction === "up") {
+            console.log("run",this.prevDirection)
+            if (this.prevDirection === "left") {
+                ctx.drawImage(this.sprite.imageBackLeft,this.bounds.x,this.bounds.y,this.bounds.w,this.bounds.h)
+
+            }
+            if (this.prevDirection === "right") {
+                ctx.drawImage(this.sprite.imageBackRight,this.bounds.x,this.bounds.y,this.bounds.w,this.bounds.h)
+
+            }
+        }
+        if (this.direction === "left") {
             ctx.drawImage(this.sprite.imageLeft,this.bounds.x,this.bounds.y,this.bounds.w,this.bounds.h)
 
         }
@@ -58,6 +75,7 @@ class Player {
             ctx.drawImage(this.sprite.imageRight,this.bounds.x,this.bounds.y,this.bounds.w,this.bounds.h)
 
         }
+        
     }
     update() {
         if (currentKey.get("w") || currentKey.get("ArrowUp")) {
@@ -70,10 +88,12 @@ class Player {
         }
         if (currentKey.get("a") || currentKey.get("ArrowLeft")) {
             this.bounds.x -= this.speed
+            this.prevDirection = this.direction;
             this.direction = "left"
         }
         if (currentKey.get("d") || currentKey.get("ArrowRight")) {
             this.bounds.x += this.speed
+            this.prevDirection = this.direction;
             this.direction = "right"
         }
         if (navKey.get(" ")) {
@@ -95,7 +115,7 @@ function keyboardInit() {
     });
 }
 let bullets = []
-let Banana = new SpriteOBJ("./Assets/Player.png","./Assets/PlayerFrontRight.png")
+let Banana = new SpriteOBJ("./Assets/Player.png","./Assets/PlayerFrontRight.png","./Assets/PlayBackLeft.png","./Assets/PlayBackRight.png")
 let player = new Player(Banana);
 function loop() {
     ctx.clearRect(0,0,canvas.width,canvas.height)

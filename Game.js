@@ -12,3 +12,6 @@ class Player {
     }
 }
 
+function loop() {
+    
+}

@@ -194,11 +194,12 @@ function keyboardInit() {
     });
 }
 let bullets = []
+let guakman = new SpriteOBJ("AvacadoManLeft.png","AvacadoMan.png","AvacadoManBackLeft.png","AvacadoManBackRight.png")
 let hotSauce = new SpriteOBJ("HotSauceManLeft.png","HotSauceManRight.png","HotSauceManBackRightLeft.png","HotSauceManBackRightRight.png")
 let Banana = new SpriteOBJ("Player.png","PlayerFrontRight.png","PlayBackLeft.png","PlayBackRight.png")
 let Ai = new Player(hotSauce, "Ai");
 let player = new Player(Banana, "Player1");
-let player2 = new Player(hotSauce, "Player2")
+let player2 = new Player(guakman, "Player2")
 let AllPlayers = [player,player2,Ai]
 
 function loop() {

@@ -1,23 +1,23 @@
-import {Rect} from "./RectUtils.js";
-import {ParticleSource} from "./Particals.js";
+import {Rect} from "./RectUtils.js"
+import {ParticleSource} from "./Particals.js"
 
-let canvas = document.getElementById("canvas");
-let ctx = canvas.getContext("2d");
+let canvas = document.getElementById("canvas")
+let ctx = canvas.getContext("2d")
 let currentKey = new Map();
-let navKey = new Map();
+let navKey = new Map()
 let mode = "menu";
-let SinglePlay = document.querySelector("#singlePlay");
+let SinglePlay = document.querySelector("#singlePlay")
 
 class SpriteOBJ {
     constructor(LeftSrc,RightSrc,BackLeft,BackRight) {
-        this.imageLeft = new Image();
+        this.imageLeft = new Image()
         this.imageLeft.src = "./Assets/" + LeftSrc;
-        this.imageRight = new Image();
+        this.imageRight = new Image()
         this.imageRight.src = "./Assets/" +RightSrc;
 
         this.imageBackLeft = new Image();
         this.imageBackLeft.src = "./Assets/" +BackLeft;
-        this.imageBackRight = new Image();
+        this.imageBackRight = new Image()
         this.imageBackRight.src = "./Assets/" +BackRight;
     }
 }
@@ -25,10 +25,10 @@ class SpriteOBJ {
 class Bullet {
     constructor(player,direction) {
         this.bounds = new Rect(player.bounds.x,player.bounds.y,26,26)
-        this.speed = 4;
+        this.speed = 4
         this.visible = true;
         this.direction = direction
-        this.image = new Image();
+        this.image = new Image()
         this.image.src = "./Assets/Bullet.png"
     }
     update() {
@@ -62,7 +62,7 @@ class Player {
         this.speed = 2;
         this.health = 3;
         this.direction = "left"
-        this.prevDirection = "left"
+        this.prevDirection = "left";
         this.type = type;
         this.heart = new Image();
         this.heart.src = "./Assets/BananaHeart.png"
@@ -102,7 +102,7 @@ class Player {
         }
     }
     update() {
-    if ( this.type == "Player1" ) {
+    if ( this.type === "Player1" ) {
         if (currentKey.get("w") || currentKey.get("w")) {
             this.bounds.y -= this.speed;
             this.direction = "up";
@@ -113,14 +113,14 @@ class Player {
         }
         if (currentKey.get("a") || currentKey.get("a")) {
             this.bounds.x -= this.speed
-            if (this.direction == "left" || this.direction == "right") {
+            if (this.direction === "left" || this.direction === "right") {
                 this.prevDirection = this.direction;
             }
             this.direction = "left"
         }
         if (currentKey.get("d") || currentKey.get("d")) {
             this.bounds.x += this.speed
-            if (this.direction == "left" || this.direction == "right") {
+            if (this.direction === "left" || this.direction === "right") {
                 this.prevDirection = this.direction;
             }
             this.direction = "right"
@@ -156,15 +156,15 @@ class Player {
             this.direction = "up";
         }
         if (currentKey.get("ArrowDown") || currentKey.get("ArrowDown")) {
-            this.bounds.y += this.speed;
-            this.direction = "down";
+            this.bounds.y += this.speed
+            this.direction = "down"
         }
         if (currentKey.get("ArrowLeft") || currentKey.get("ArrowLeft")) {
             this.bounds.x -= this.speed;
             if (this.direction === "left" || this.direction === "right") {
                 this.prevDirection = this.direction;
             }
-            this.direction = "left";
+            this.direction = "left"
         }
         if (currentKey.get("ArrowRight") || currentKey.get("ArrowRight")) {
             this.bounds.x += this.speed;
@@ -210,16 +210,16 @@ function loop() {
     if ( mode == "menu" ) {
         // enter menu code
     }
-    if ( mode == "game" ) {
+    if ( mode === "game" ) {
         canvas.style.visibility = "visible";
         document.getElementById("menu-container").style.visibility = "hidden";
         for(let i = 0; i < AllPlayers.length; i++) {
-            AllPlayers[i].draw();
-            AllPlayers[i].update();
+            AllPlayers[i].draw()
+            AllPlayers[i].update()
         }
         for (let i = 0; i < bullets.length; i++) {
-            bullets[i].draw();
-            bullets[i].update();
+            bullets[i].draw()
+            bullets[i].update()
         }
         navKey.clear();
     }

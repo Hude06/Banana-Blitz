@@ -198,7 +198,8 @@ let hotSauce = new SpriteOBJ("HotSauceManLeft.png","HotSauceManRight.png","HotSa
 let Banana = new SpriteOBJ("Player.png","PlayerFrontRight.png","PlayBackLeft.png","PlayBackRight.png")
 let Ai = new Player(hotSauce, "Ai");
 let player = new Player(Banana, "Player1");
-let AllPlayers = [player,Ai]
+let player2 = new Player(hotSauce, "Player2")
+let AllPlayers = [player,player2,Ai]
 
 function loop() {
     ctx.clearRect(0,0,canvas.width,canvas.height)
@@ -207,14 +208,14 @@ function loop() {
     }
     if ( mode == "game" ) {
         canvas.style.visibility = "visible"
-        player.draw();
-        player.update();
+        for(let i = 0; i < AllPlayers.length; i++) {
+            AllPlayers[i].draw();
+            AllPlayers[i].update();
+        }
         for (let i = 0; i < bullets.length; i++) {
             bullets[i].draw();
             bullets[i].update();
         }
-        Ai.draw();
-        Ai.update();
         navKey.clear();
     }
     requestAnimationFrame(loop)

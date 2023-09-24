@@ -50,12 +50,18 @@ class Player {
         this.sprite = SpriteOBJ
         this.bounds = new Rect(10,10,64,64)
         this.speed = 2;
+        this.health = 3;
         this.direction = "left"
         this.prevDirection = "left"
         this.type = type;
+        this.heart = new Image();
+        this.heart.src = "./Assets/BananaHeart.png"
     }
     draw() {
         ctx.imageSmoothingEnabled = false;
+        for (let i = 0; i < this.health; i++) {
+            ctx.drawImage(this.heart, 10 + (i*30),10,32,32)
+        }
         if (this.direction === "up") {
             console.log("run",this.prevDirection)
             if (this.prevDirection === "left") {
@@ -78,6 +84,13 @@ class Player {
         
     }
     update() {
+        for (let i = 0; i < AllPlayers.length; i++) {
+            for (let b = 0; b < bullets.length; b++) {
+                if (this.bounds.intersects(bullets[b].bounds) || bullets[b].bounds.intersects(this.bounds)) {
+                    this.health -= 0.01;
+                }
+            }
+        }
         if ( this.type == "Player1" ) {
         if (currentKey.get("w") || currentKey.get("w")) {
             this.bounds.y -= this.speed
@@ -185,7 +198,7 @@ let hotSauce = new SpriteOBJ("HotSauceManLeft.png","HotSauceManRight.png","HotSa
 let Banana = new SpriteOBJ("Player.png","PlayerFrontRight.png","PlayBackLeft.png","PlayBackRight.png")
 let Ai = new Player(hotSauce, "Ai");
 let player = new Player(Banana, "Player1");
-let AllPlayers = [player]
+let AllPlayers = [player,Ai]
 
 function loop() {
     ctx.clearRect(0,0,canvas.width,canvas.height)

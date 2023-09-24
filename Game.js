@@ -3,7 +3,7 @@ let canvas = document.getElementById("canvas");
 let ctx = canvas.getContext("2d");
 let currentKey = new Map();
 let navKey = new Map();
-let mode = "game";
+let mode = "menu";
 let SinglePlay = document.getElementById("singlePlay");
 class SpriteOBJ {
     constructor(LeftSrc,RightSrc,BackLeft,BackRight) {

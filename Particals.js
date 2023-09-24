@@ -1,4 +1,4 @@
-class ParticleSource {
+export class ParticleSource {
     constructor() {
         this.parts = [];
         this.particles_enabled = true;
@@ -44,5 +44,5 @@ class ParticleSource {
                 part.alive = false;
             }
         });
-    }
-}
+    };
+};

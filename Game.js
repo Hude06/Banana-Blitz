@@ -6,17 +6,17 @@ let ctx = canvas.getContext("2d")
 let currentKey = new Map();
 let navKey = new Map()
 let mode = "menu";
-let SinglePlay = document.querySelector("#singlePlay")
+let SinglePlay = document.getElementById("but")
 
 class SpriteOBJ {
     constructor(LeftSrc,RightSrc,BackLeft,BackRight) {
         this.imageLeft = new Image()
-        this.imageLeft.src = "./Assets/" + LeftSrc;
+        this.imageLeft.src = "./Assets/" +LeftSrc;
         this.imageRight = new Image()
         this.imageRight.src = "./Assets/" +RightSrc;
 
         this.imageBackLeft = new Image();
-        this.imageBackLeft.src = "./Assets/" +BackLeft;
+        this.imageBackLeft.src = "./Assets/" + BackLeft;
         this.imageBackRight = new Image()
         this.imageBackRight.src = "./Assets/" +BackRight;
     }
@@ -230,5 +230,9 @@ function init() {
     keyboardInit();
     loop();
 }
-
+console.log(SinglePlay)
+function start() {
+    console.log("start");
+}
+SinglePlay.addEventListener("click", start);
 init();

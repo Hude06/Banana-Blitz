@@ -154,7 +154,7 @@ class Player {
             }
             this.direction = "right"
         }
-        if (navKey.get(" ")) {
+        if (navKey.get("m")) {
             bullets.push (new Bullet(this,this.direction))
 
         }

@@ -195,8 +195,8 @@ function keyboardInit() {
 }
 let bullets = []
 let guakman = new SpriteOBJ("AvacadoManLeft.png","AvacadoMan.png","AvacadoManBackLeft.png","AvacadoManBackRight.png")
-let hotSauce = new SpriteOBJ("HotSauceManLeft.png","HotSauceManRight.png","HotSauceManBackRightLeft.png","HotSauceManBackRightRight.png")
-let Banana = new SpriteOBJ("Player.png","PlayerFrontRight.png","PlayBackLeft.png","PlayBackRight.png")
+let hotSauce = new SpriteOBJ("HotSauceManLeft.png","HotSauceManRight.png","HotSauceManBackLeft.png","HotSauceManBackRight.png")
+let Banana = new SpriteOBJ("Player.png","PlayerRight.png","PlayBackLeft.png","PlayBackRight.png")
 let Ai = new Player(hotSauce, "Ai");
 let player = new Player(Banana, "Player1");
 let player2 = new Player(guakman, "Player2")

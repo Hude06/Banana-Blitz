@@ -4,6 +4,7 @@ let ctx = canvas.getContext("2d");
 let currentKey = new Map();
 let navKey = new Map();
 let mode = "menu";
+let SinglePlay = document.getElementById("singlePlay");
 class SpriteOBJ {
     constructor(LeftSrc,RightSrc,BackLeft,BackRight) {
         this.imageLeft = new Image();
@@ -222,6 +223,11 @@ function loop() {
     requestAnimationFrame(loop)
 }
 function init() {
+    console.log(SinglePlay)
+    SinglePlay.addEventListener("click", function() {
+        console.log("Clicked")
+        mode = "game"
+    }); 
     keyboardInit();
     loop();
 }

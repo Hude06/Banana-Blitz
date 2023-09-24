@@ -5,6 +5,10 @@
         #menu {
             text-align: center;
         }
+        button {
+            width: 500px;
+            height: 200px;
+        }
         body {
             overflow: hidden;
             background-color: #ffde3e;

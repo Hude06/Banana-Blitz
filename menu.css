@@ -5,15 +5,20 @@
 .menu-container button {
     font-size: 3vmin;
     border: 5px solid;
-    width: 300px;
     background-color: #ffde3e;
     padding: 20px;
     border-radius: 50px;
+    width: 40vmin;
+    height: 20vmin;
+
 }
 
 .menu-container {
+    
     text-align: center;
     border: 5px solid;
-    background-color: beige;
+    background-color: rgb(255, 255, 255);
     border-radius: 50px;
+    width: 98vmax;
+    height: 96vmin;
 }

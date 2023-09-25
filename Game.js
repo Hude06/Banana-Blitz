@@ -6,7 +6,7 @@ let ctx = canvas.getContext("2d")
 let currentKey = new Map();
 let navKey = new Map()
 let mode = "menu";
-let SinglePlay = document.getElementById("but")
+let SinglePlay = document.getElementById("singleplay")
 
 class SpriteOBJ {
     constructor(LeftSrc,RightSrc,BackLeft,BackRight) {
@@ -227,12 +227,10 @@ function loop() {
 }
 
 function init() {
+    SinglePlay.addEventListener("click", function(){
+        mode = "game"
+    });
     keyboardInit();
     loop();
 }
-console.log(SinglePlay)
-function start() {
-    console.log("start");
-}
-SinglePlay.addEventListener("click", start);
 init();

@@ -22,4 +22,6 @@
     border-radius: 50px;
     width: 98vmax;
     height: 96vmin;
+    position: absolute;
+    z-index: 1;
 }

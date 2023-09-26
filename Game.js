@@ -24,12 +24,13 @@ class SpriteOBJ {
 
 class Bullet {
     constructor(player,direction) {
-        this.bounds = new Rect(player.bounds.x,player.bounds.y,26,26)
+        this.bounds = new Rect(player.bounds.x+player.addjusterX,player.bounds.y+player.addjusterY,26,26)
         this.speed = 4
         this.visible = true;
         this.direction = direction
         this.image = new Image()
         this.image.src = "./Assets/Bullet.png"
+        this.addjuster = 0;
     }
     update() {
         if (this.visible) {
@@ -56,6 +57,8 @@ class Bullet {
 
 class Player { 
     constructor(SpriteOBJ, type) {
+        this.addjusterX = 0;
+        this.addjusterY = 0;
         this.original = SpriteOBJ
         this.sprite = SpriteOBJ
         this.bounds = new Rect(10,10,64,64)
@@ -105,13 +108,19 @@ class Player {
     if ( this.type === "Player1" ) {
         if (currentKey.get("w") || currentKey.get("w")) {
             this.bounds.y -= this.speed;
+            this.addjusterX = 15
+            this.addjusterY = -50
             this.direction = "up";
         }
         if (currentKey.get("s") || currentKey.get("s")) {
+            this.addjusterX = 19
+            this.addjusterY = 70
             this.bounds.y += this.speed;
             this.direction = "down";
         }
         if (currentKey.get("a") || currentKey.get("a")) {
+            this.addjusterX = -40
+            this.addjusterY = 18
             this.bounds.x -= this.speed
             if (this.direction === "left" || this.direction === "right") {
                 this.prevDirection = this.direction;
@@ -119,6 +128,8 @@ class Player {
             this.direction = "left"
         }
         if (currentKey.get("d") || currentKey.get("d")) {
+            this.addjusterX = 70
+            this.addjusterY = 18
             this.bounds.x += this.speed
             if (this.direction === "left" || this.direction === "right") {
                 this.prevDirection = this.direction;

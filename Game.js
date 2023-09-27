@@ -52,6 +52,9 @@ class Bullet {
         if (this.visible) {
             ctx.drawImage(this.image,this.bounds.x,this.bounds.y,this.bounds.w,this.bounds.h)
         }
+        else {
+            // bullets.shift();
+        }
     }
 }
 

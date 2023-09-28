@@ -60,6 +60,9 @@ class Bullet {
         this.bounds.w,
         this.bounds.h
       );
+        else {
+            // bullets.shift();
+        }
     }
   }
 }

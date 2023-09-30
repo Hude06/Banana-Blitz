@@ -7,6 +7,7 @@ let currentKey = new Map();
 let navKey = new Map();
 let mode = "menu";
 let SinglePlay = document.getElementById("singleplay");
+let funcRUN = false;
 class SpriteOBJ {
   constructor(LeftSrc, RightSrc, BackLeft, BackRight) {
     this.imageLeft = new Image();
@@ -60,12 +61,10 @@ class Bullet {
         this.bounds.w,
         this.bounds.h
       );
-        else {
-            // bullets.shift();
-        }
     }
   }
 }
+let playerHealth = 4;
 class Player {
   constructor(SpriteOBJ, type) {
     this.addjusterX = 0;
@@ -74,36 +73,42 @@ class Player {
     this.sprite = SpriteOBJ;
     this.bounds = new Rect(10, 10, 100, 100);
     this.speed = 2;
-    this.health = 3;
     this.direction = "left";
     this.prevDirection = "left";
     this.type = type;
     this.heart = new Image();
     this.heart.src = "./Assets/BananaHeart.png";
   }
+  removeHealth(num) {
+    if (funcRUN === false) {
+      funcRUN = true;
+      setTimeout(() => {
+        playerHealth -= num
+        funcRUN = false;
+      }, 200);
+    }
+  }
   draw() {
     ctx.imageSmoothingEnabled = false;
-    // if (this.health <= 0) {
-    //     this.health = 0
-    // }
     if (this.type === "Player1") {
+      if (playerHealth <= 0) {
+        playerHealth = 0;
+      }
+      console.log(playerHealth)
+      for (let i = 0; i < playerHealth; i++) {
+        ctx.drawImage(this.heart, 5 + (i * 55), 10, 55, 55);
+      }
       for (let b = 0; b < bullets.length; b++) {
         if (
           this.bounds.intersects(bullets[b].bounds) ||
           bullets[b].bounds.intersects(this.bounds)
         ) {
+          this.removeHealth(1)
           bullets[b].visible = false;
-          this.health -= 1;
-          // console.log(this.health)
         }
       }
     }
-    console.log(this.health);
-    for (let i = 0; i < this.health; i++) {
-      ctx.drawImage(this.heart, 10 + (i *= 30), 10, 32, 32);
-    }
     if (this.direction == "up") {
-      console.log("run", this.prevDirection);
       if (this.prevDirection == "left") {
         ctx.drawImage(
           this.sprite.imageBackLeft,
@@ -266,6 +271,7 @@ let Banana = new SpriteOBJ(
 );
 
 let Ai = new Player(hotSauce, "Ai");
+Ai.bounds.x = 500
 let player = new Player(Banana, "Player1");
 let player2 = new Player(guakman, "Player2");
 let AllPlayers = [player, player2, Ai];

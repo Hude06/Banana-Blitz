@@ -8,6 +8,8 @@ let navKey = new Map();
 let mode = "menu";
 let SinglePlay = document.getElementById("singleplay");
 let funcRUN = false;
+let funcRUN2 = false;
+
 class SpriteOBJ {
   constructor(LeftSrc, RightSrc, BackLeft, BackRight) {
     this.imageLeft = new Image();
@@ -22,7 +24,8 @@ class SpriteOBJ {
   }
 }
 class Bullet {
-  constructor(player, direction) {
+  constructor(player, direction,num) {
+    this.num = num
     this.bounds = new Rect(
       player.bounds.x + player.addjusterX,
       player.bounds.y + player.addjusterY,
@@ -37,6 +40,7 @@ class Bullet {
     this.addjuster = 0;
   }
   update() {
+    console.log(this.num)
     if (this.visible) {
       if (this.direction == "up") {
         this.bounds.y -= this.speed;
@@ -65,6 +69,8 @@ class Bullet {
   }
 }
 let playerHealth = 4;
+let playerHealth2 = 4;
+
 class Player {
   constructor(SpriteOBJ, type) {
     this.addjusterX = 0;
@@ -83,8 +89,17 @@ class Player {
     if (funcRUN === false) {
       funcRUN = true;
       setTimeout(() => {
-        playerHealth -= num
+        playerHealth -= num;
         funcRUN = false;
+      }, 200);
+    }
+  }
+  removeHealth2(num) {
+    if (funcRUN2 === false) {
+      funcRUN2 = true;
+      setTimeout(() => {
+        playerHealth2 -= num;
+        funcRUN2 = false;
       }, 200);
     }
   }
@@ -93,17 +108,39 @@ class Player {
     if (this.type === "Player1") {
       if (playerHealth <= 0) {
         playerHealth = 0;
+        alert("Player 1 Died");
+        location.reload();
       }
-      console.log(playerHealth)
       for (let i = 0; i < playerHealth; i++) {
-        ctx.drawImage(this.heart, 5 + (i * 55), 10, 55, 55);
+        ctx.drawImage(this.heart, 5 + i * 55, 10, 55, 55);
       }
       for (let b = 0; b < bullets.length; b++) {
         if (
           this.bounds.intersects(bullets[b].bounds) ||
           bullets[b].bounds.intersects(this.bounds)
         ) {
-          this.removeHealth(1)
+          this.removeHealth(1);
+          bullets[b].visible = false;
+        }
+      }
+    }
+    if (this.type === "Player2") {
+      if (playerHealth2 <= 0) {
+        playerHealth2 = 0;
+        alert("Player 2 Died");
+        location.reload();
+
+      }
+      console.log(playerHealth2);
+      for (let i = 0; i < playerHealth2; i++) {
+        ctx.drawImage(this.heart, 1400 + i * 55, 10, 55, 55);
+      }
+      for (let b = 0; b < bullets.length; b++) {
+        if (
+          this.bounds.intersects(bullets[b].bounds) ||
+          bullets[b].bounds.intersects(this.bounds)
+        ) {
+          this.removeHealth2(1);
           bullets[b].visible = false;
         }
       }
@@ -180,7 +217,7 @@ class Player {
         this.direction = "right";
       }
       if (navKey.get(" ")) {
-        bullets.push(new Bullet(this, this.direction));
+        bullets.push(new Bullet(this, this.direction,""));
       }
     }
     if (this.type == "Ai") {
@@ -201,17 +238,22 @@ class Player {
         this.direction = "up";
       }
       if (Math.floor(Math.random() * 100) === 13) {
-        bullets.push(new Bullet(this, this.direction));
+        bullets.push(new Bullet(this, this.direction,2));
       }
     }
     if (this.type == "Player2") {
       if (currentKey.get("ArrowUp") || currentKey.get("ArrowUp")) {
         this.bounds.y -= this.speed;
         this.direction = "up";
+        this.addjusterX = 30;
+        this.addjusterY = -50;
+        this.direction = "up";
       }
       if (currentKey.get("ArrowDown") || currentKey.get("ArrowDown")) {
         this.bounds.y += this.speed;
         this.direction = "down";
+        this.addjusterX = 30;
+        this.addjusterY = 100;
       }
       if (currentKey.get("ArrowLeft") || currentKey.get("ArrowLeft")) {
         this.bounds.x -= this.speed;
@@ -219,9 +261,13 @@ class Player {
           this.prevDirection = this.direction;
         }
         this.direction = "left";
+        this.addjusterX = -40;
+        this.addjusterY = 18;
       }
       if (currentKey.get("ArrowRight") || currentKey.get("ArrowRight")) {
         this.bounds.x += this.speed;
+        this.addjusterX = 100;
+        this.addjusterY = 18;
         if (this.direction === "left" || this.direction === "right") {
           this.prevDirection = this.direction;
         }
@@ -271,7 +317,7 @@ let Banana = new SpriteOBJ(
 );
 
 let Ai = new Player(hotSauce, "Ai");
-Ai.bounds.x = 500
+Ai.bounds.x = 500;
 let player = new Player(Banana, "Player1");
 let player2 = new Player(guakman, "Player2");
 let AllPlayers = [player, player2, Ai];

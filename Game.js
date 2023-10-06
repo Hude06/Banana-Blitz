@@ -11,7 +11,7 @@ let MultiPlay = document.getElementById("multiPlay");
 
 let funcRUN = false;
 let funcRUN2 = false;
-
+let Shake = false;
 class SpriteOBJ {
   constructor(LeftSrc, RightSrc, BackLeft, BackRight) {
     this.imageLeft = new Image();
@@ -219,6 +219,10 @@ class Player {
       }
       if (navKey.get(" ")) {
         bullets.push(new Bullet(this, this.direction, ""));
+        Shake = true
+        setTimeout(() => {
+            Shake = false
+          }, 100);
       }
     }
     if (this.type == "Ai") {
@@ -240,6 +244,10 @@ class Player {
       }
       if (Math.floor(Math.random() * 100) === 13) {
         bullets.push(new Bullet(this, this.direction, 2));
+        Shake = true
+        setTimeout(() => {
+            Shake = false
+          }, 100);
       }
     }
     if (this.type == "Player2") {
@@ -276,6 +284,10 @@ class Player {
       }
       if (navKey.get("m")) {
         bullets.push(new Bullet(this, this.direction));
+        Shake = true
+        setTimeout(() => {
+            Shake = false
+          }, 100);
       }
     }
   }
@@ -338,8 +350,17 @@ function pushplayer(n,b) {
     }
   }
 }
+function postShake() {
+  ctx.restore();
+}
 function loop() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
+  ctx.save();
+  if (Shake) {
+    var dx = Math.random()*15;
+    var dy = Math.random()*15;
+    ctx.translate(dx, dy);
+}
   if (mode == "menu") {
     // enter menu code
   }
@@ -373,6 +394,7 @@ function loop() {
     }
     navKey.clear();
   }
+  postShake();
   requestAnimationFrame(loop);
 }
 

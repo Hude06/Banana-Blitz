@@ -7,6 +7,8 @@ let currentKey = new Map();
 let navKey = new Map();
 let mode = "menu";
 let SinglePlay = document.getElementById("singleplay");
+let MultiPlay = document.getElementById("multiPlay");
+
 let funcRUN = false;
 let funcRUN2 = false;
 
@@ -24,8 +26,8 @@ class SpriteOBJ {
   }
 }
 class Bullet {
-  constructor(player, direction,num) {
-    this.num = num
+  constructor(player, direction, num) {
+    this.num = num;
     this.bounds = new Rect(
       player.bounds.x + player.addjusterX,
       player.bounds.y + player.addjusterY,
@@ -40,7 +42,7 @@ class Bullet {
     this.addjuster = 0;
   }
   update() {
-    console.log(this.num)
+    console.log(this.num);
     if (this.visible) {
       if (this.direction == "up") {
         this.bounds.y -= this.speed;
@@ -129,7 +131,6 @@ class Player {
         playerHealth2 = 0;
         alert("Player 2 Died");
         location.reload();
-
       }
       console.log(playerHealth2);
       for (let i = 0; i < playerHealth2; i++) {
@@ -217,7 +218,7 @@ class Player {
         this.direction = "right";
       }
       if (navKey.get(" ")) {
-        bullets.push(new Bullet(this, this.direction,""));
+        bullets.push(new Bullet(this, this.direction, ""));
       }
     }
     if (this.type == "Ai") {
@@ -238,7 +239,7 @@ class Player {
         this.direction = "up";
       }
       if (Math.floor(Math.random() * 100) === 13) {
-        bullets.push(new Bullet(this, this.direction,2));
+        bullets.push(new Bullet(this, this.direction, 2));
       }
     }
     if (this.type == "Player2") {
@@ -320,15 +321,47 @@ let Ai = new Player(hotSauce, "Ai");
 Ai.bounds.x = 500;
 let player = new Player(Banana, "Player1");
 let player2 = new Player(guakman, "Player2");
-let AllPlayers = [player, player2, Ai];
-
+let AllPlayers = [Ai];
+let hasplayer = false;
+function pushplayer(n,b) {
+  for (let i = 0; i < AllPlayers.length; i++) {
+    if (AllPlayers[i] === n || AllPlayers[i] === b) {
+      hasplayer = true;
+    } else {
+      if (hasplayer === false) {
+        AllPlayers.push(n)
+        if (b != undefined) {
+          AllPlayers.push(b)
+        }
+        hasplayer = true;
+      }
+    }
+  }
+}
 function loop() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   if (mode == "menu") {
     // enter menu code
   }
-  if (mode === "game") {
+  if (mode === "multiplayer") {
     canvas.style.visibility = "visible";
+    pushplayer(player,player2)
+    console.log(AllPlayers)
+    document.getElementById("menu-container").style.visibility = "hidden";
+    for (let i = 0; i < AllPlayers.length; i++) {
+      AllPlayers[i].draw();
+      AllPlayers[i].update();
+    }
+    for (let i = 0; i < bullets.length; i++) {
+      bullets[i].draw();
+      bullets[i].update();
+    }
+    navKey.clear();
+  }
+  if (mode === "singleplay") {
+    canvas.style.visibility = "visible";
+    pushplayer(player)
+    console.log(AllPlayers)
     document.getElementById("menu-container").style.visibility = "hidden";
     for (let i = 0; i < AllPlayers.length; i++) {
       AllPlayers[i].draw();
@@ -345,7 +378,10 @@ function loop() {
 
 function init() {
   SinglePlay.addEventListener("click", function () {
-    mode = "game";
+    mode = "singleplay";
+  });
+  MultiPlay.addEventListener("click", function () {
+    mode = "multiplayer";
   });
   keyboardInit();
   loop();

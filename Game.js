@@ -12,8 +12,32 @@ let MultiPlay = document.getElementById("multiPlay");
 let funcRUN = false;
 let funcRUN2 = false;
 let Shake = false;
+function cameraFolow(OTF) {
+  // console.log("Followiong")
+  const cameraX = (canvas.width / 100) - (OTF.bounds.x*1.1)-150;
+  const cameraY = (canvas.height / 100) - (OTF.bounds.y*1.1)+100;
+  ctx.save();
+  ctx.translate(cameraX+canvas.width/2, cameraY+canvas.height/2);
+}
+class MapOBJ {
+  constructor(src) {
+    this.map = new Image();
+    this.map.src = src
+    this.objects = []
+  }
+}
+class Level {
+  constructor(map) {
+    this.image = map.map
+    this.bounds = new Rect(10,10,320*5,160*5)
+  }
+  draw() {
+    ctx.imageSmoothingEnabled = false
+    ctx.drawImage(this.image,this.bounds.x,this.bounds.y,this.bounds.w,this.bounds.h)
+  }
+}
 class SpriteOBJ {
-  constructor(LeftSrc, RightSrc, BackLeft, BackRight) {
+  constructor(LeftSrc, RightSrc, BackLeft, BackRight,heart) {
     this.imageLeft = new Image();
     this.imageLeft.src = "./Assets/" + LeftSrc;
     this.imageRight = new Image();
@@ -23,6 +47,9 @@ class SpriteOBJ {
     this.imageBackLeft.src = "./Assets/" + BackLeft;
     this.imageBackRight = new Image();
     this.imageBackRight.src = "./Assets/" + BackRight;
+    
+    this.imageHeart = new Image();
+    this.imageHeart.src = "./Assets/" + heart;
   }
 }
 class Bullet {
@@ -42,7 +69,6 @@ class Bullet {
     this.addjuster = 0;
   }
   update() {
-    console.log(this.num);
     if (this.visible) {
       if (this.direction == "up") {
         this.bounds.y -= this.speed;
@@ -70,51 +96,41 @@ class Bullet {
     }
   }
 }
-let playerHealth = 4;
-let playerHealth2 = 4;
-
 class Player {
   constructor(SpriteOBJ, type) {
     this.addjusterX = 0;
     this.addjusterY = 0;
     this.original = SpriteOBJ;
     this.sprite = SpriteOBJ;
-    this.bounds = new Rect(10, 10, 100, 100);
+    this.bounds = new Rect(500, 400, 100, 100);
     this.speed = 2;
     this.direction = "left";
     this.prevDirection = "left";
     this.type = type;
-    this.heart = new Image();
-    this.heart.src = "./Assets/BananaHeart.png";
+    this.health = 4;
   }
   removeHealth(num) {
     if (funcRUN === false) {
       funcRUN = true;
       setTimeout(() => {
-        playerHealth -= num;
+        this.health -= num;
         funcRUN = false;
-      }, 200);
-    }
-  }
-  removeHealth2(num) {
-    if (funcRUN2 === false) {
-      funcRUN2 = true;
-      setTimeout(() => {
-        playerHealth2 -= num;
-        funcRUN2 = false;
-      }, 200);
+      }, 100);
     }
   }
   draw() {
     ctx.imageSmoothingEnabled = false;
     if (this.type === "Player1") {
-      if (playerHealth <= 0) {
-        playerHealth = 0;
+      if (this.health <= 0) {
+        this.health = 0;
         alert("Player 1 Died");
         location.reload();
       }
-      for (let i = 0; i < playerHealth; i++) {
-        ctx.drawImage(this.heart, 5 + i * 55, 10, 55, 55);
+      for (let p = 1; p < AllPlayers.length; p++) {
+        for (let i = 0; i < this.health; i++) {
+          console.log("all",AllPlayers.length)
+          ctx.drawImage(this.sprite.imageHeart, (p*250) + i * 55, 10, 55, 55);
+        }
       }
       for (let b = 0; b < bullets.length; b++) {
         if (
@@ -127,21 +143,22 @@ class Player {
       }
     }
     if (this.type === "Player2") {
-      if (playerHealth2 <= 0) {
-        playerHealth2 = 0;
+      if (this.health <= 0) {
+        this.health = 0;
         alert("Player 2 Died");
         location.reload();
       }
-      console.log(playerHealth2);
-      for (let i = 0; i < playerHealth2; i++) {
-        ctx.drawImage(this.heart, 1400 + i * 55, 10, 55, 55);
+      for (let p = 1; p < AllPlayers.length; p++) {
+        for (let i = 0; i < this.health; i++) {
+          ctx.drawImage(this.sprite.imageHeart, (p*250) + i * 55, 10, 55, 55);
+        }
       }
       for (let b = 0; b < bullets.length; b++) {
         if (
           this.bounds.intersects(bullets[b].bounds) ||
           bullets[b].bounds.intersects(this.bounds)
         ) {
-          this.removeHealth2(1);
+          this.removeHealth(1);
           bullets[b].visible = false;
         }
       }
@@ -218,36 +235,53 @@ class Player {
         this.direction = "right";
       }
       if (navKey.get(" ")) {
-        bullets.push(new Bullet(this, this.direction, ""));
-        Shake = true
-        setTimeout(() => {
-            Shake = false
-          }, 100);
+        bullets.push(new Bullet(this, this.direction, ""))
       }
     }
     if (this.type == "Ai") {
+      for (let p = 0; p < AllPlayers.length; p++) {
+        for (let i = 0; i < this.health; i++) {
+          console.log(p)
+          console.log(this.sprite.imageHeart)
+          ctx.drawImage(this.sprite.imageHeart, (p*250) + i * 55, 10, 55, 55);
+        }
+      }
       if (this.bounds.x < player.bounds.x) {
+        this.addjusterX = 125;
+        this.addjusterY = 18;
         this.bounds.x += 1;
         this.direction = "right";
       }
       if (this.bounds.x > player.bounds.x) {
         this.bounds.x -= 1;
+        this.addjusterX = -80;
+        this.addjusterY = 18;
         this.direction = "left";
       }
       if (this.bounds.y < player.bounds.y) {
         this.bounds.y += 1;
+        this.addjusterX = 30;
+        this.addjusterY = 125;
         this.direction = "down";
       }
       if (this.bounds.y > player.bounds.y) {
         this.bounds.y -= 1;
+        this.addjusterX = 30;
+        this.addjusterY = -90;
         this.direction = "up";
       }
       if (Math.floor(Math.random() * 100) === 13) {
         bullets.push(new Bullet(this, this.direction, 2));
-        Shake = true
-        setTimeout(() => {
-            Shake = false
-          }, 100);
+
+      }
+      for (let b = 0; b < bullets.length; b++) {
+        if (
+          this.bounds.intersects(bullets[b].bounds) ||
+          bullets[b].bounds.intersects(this.bounds)
+        ) {
+          this.removeHealth(1);
+          // bullets[b].visible = false;
+        }
       }
     }
     if (this.type == "Player2") {
@@ -284,10 +318,7 @@ class Player {
       }
       if (navKey.get("m")) {
         bullets.push(new Bullet(this, this.direction));
-        Shake = true
-        setTimeout(() => {
-            Shake = false
-          }, 100);
+
       }
     }
   }
@@ -310,23 +341,29 @@ function keyboardInit() {
   });
 }
 let bullets = [];
+let bananaWorld = new MapOBJ("./Assets/Map.png");
+let world = new Level(bananaWorld);
 let guakman = new SpriteOBJ(
   "AvacadoManLeft.png",
   "AvacadoMan.png",
   "AvacadoManBackLeft.png",
-  "AvacadoManBackRight.png"
+  "AvacadoManBackRight.png",
+  "BananaHeart.png"
+
 );
 let hotSauce = new SpriteOBJ(
   "HotSauceManLeft.png",
   "HotSauceManRight.png",
   "HotSauceManBackLeft.png",
-  "HotSauceManBackRight.png"
+  "HotSauceManBackRight.png",
+  "HotSauceManHearts.png"
 );
 let Banana = new SpriteOBJ(
   "Player.png",
   "PlayerRight.png",
   "PlayBackLeft.png",
-  "PlayBackRight.png"
+  "PlayBackRight.png",
+  "BananaHeart.png"
 );
 
 let Ai = new Player(hotSauce, "Ai");
@@ -367,7 +404,6 @@ function loop() {
   if (mode === "multiplayer") {
     canvas.style.visibility = "visible";
     pushplayer(player,player2)
-    console.log(AllPlayers)
     document.getElementById("menu-container").style.visibility = "hidden";
     for (let i = 0; i < AllPlayers.length; i++) {
       AllPlayers[i].draw();
@@ -380,9 +416,12 @@ function loop() {
     navKey.clear();
   }
   if (mode === "singleplay") {
+    ctx.save();
+    cameraFolow(player);
+
     canvas.style.visibility = "visible";
     pushplayer(player)
-    console.log(AllPlayers)
+    world.draw();
     document.getElementById("menu-container").style.visibility = "hidden";
     for (let i = 0; i < AllPlayers.length; i++) {
       AllPlayers[i].draw();
@@ -393,6 +432,7 @@ function loop() {
       bullets[i].update();
     }
     navKey.clear();
+    ctx.restore();
   }
   postShake();
   requestAnimationFrame(loop);

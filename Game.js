@@ -251,20 +251,20 @@ class Player {
       }
     }
     if (this.type == "Player2") {
-      if (currentKey.get("ArrowUp") || currentKey.get("ArrowUp")) {
+      if (currentKey.get("ArrowUp")) {
         this.bounds.y -= this.speed;
         this.direction = "up";
         this.addjusterX = 30;
         this.addjusterY = -50;
         this.direction = "up";
       }
-      if (currentKey.get("ArrowDown") || currentKey.get("ArrowDown")) {
+      if (currentKey.get("ArrowDown")) {
         this.bounds.y += this.speed;
         this.direction = "down";
         this.addjusterX = 30;
         this.addjusterY = 100;
       }
-      if (currentKey.get("ArrowLeft") || currentKey.get("ArrowLeft")) {
+      if (currentKey.get("ArrowLeft")) {
         this.bounds.x -= this.speed;
         if (this.direction === "left" || this.direction === "right") {
           this.prevDirection = this.direction;
@@ -273,7 +273,7 @@ class Player {
         this.addjusterX = -40;
         this.addjusterY = 18;
       }
-      if (currentKey.get("ArrowRight") || currentKey.get("ArrowRight")) {
+      if (currentKey.get("ArrowRight")) {
         this.bounds.x += this.speed;
         this.addjusterX = 100;
         this.addjusterY = 18;

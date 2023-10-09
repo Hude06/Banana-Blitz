@@ -10,14 +10,19 @@ let SinglePlay = document.getElementById("singleplay");
 let MultiPlay = document.getElementById("multiPlay");
 
 let funcRUN = false;
-let funcRUN2 = false;
 let Shake = false;
-function cameraFolow(OTF) {
-  // console.log("Followiong")
-  const cameraX = (canvas.width / 100) - (OTF.bounds.x*1.1)-150;
-  const cameraY = (canvas.height / 100) - (OTF.bounds.y*1.1)+100;
-  ctx.save();
-  ctx.translate(cameraX+canvas.width/2, cameraY+canvas.height/2);
+class Dialog {
+  constructor() {
+    this.text = ""
+  }
+  write(text) {
+    this.text = text
+    ctx.lineWidth = 5;
+    ctx.strokeRect(500,600,600,175)
+    ctx.font = "24px serif";
+    console.log("Text Length",this.text.length)
+    ctx.fillText(this.text, 750 - this.text.length*2.5, 700);
+  }
 }
 class MapOBJ {
   constructor(src) {
@@ -29,7 +34,7 @@ class MapOBJ {
 class Level {
   constructor(map) {
     this.image = map.map
-    this.bounds = new Rect(10,10,320*5,160*5)
+    this.bounds = new Rect(8,1,320*5,160*5)
   }
   draw() {
     ctx.imageSmoothingEnabled = false
@@ -86,6 +91,8 @@ class Bullet {
   }
   draw() {
     if (this.visible) {
+      ctx.strokeStyle = "red"
+      ctx.strokeRect(this.bounds.x,this.bounds.y,this.bounds.w,this.bounds.h)
       ctx.drawImage(
         this.image,
         this.bounds.x,
@@ -97,12 +104,12 @@ class Bullet {
   }
 }
 class Player {
-  constructor(SpriteOBJ, type) {
+  constructor(SpriteOBJ, type,x,y) {
     this.addjusterX = 0;
     this.addjusterY = 0;
     this.original = SpriteOBJ;
     this.sprite = SpriteOBJ;
-    this.bounds = new Rect(500, 400, 100, 100);
+    this.bounds = new Rect(x, y, 100, 100);
     this.speed = 2;
     this.direction = "left";
     this.prevDirection = "left";
@@ -120,6 +127,15 @@ class Player {
   }
   draw() {
     ctx.imageSmoothingEnabled = false;
+    for (let b = 0; b < bullets.length; b++) {
+      if (
+        this.bounds.intersects(bullets[b].bounds) ||
+        bullets[b].bounds.intersects(this.bounds)
+      ) {
+        bullets[b].visible = false;
+        this.health -= 1
+      }
+    }
     if (this.type === "Player1") {
       if (this.health <= 0) {
         this.health = 0;
@@ -128,17 +144,7 @@ class Player {
       }
       for (let p = 1; p < AllPlayers.length; p++) {
         for (let i = 0; i < this.health; i++) {
-          console.log("all",AllPlayers.length)
           ctx.drawImage(this.sprite.imageHeart, (p*250) + i * 55, 10, 55, 55);
-        }
-      }
-      for (let b = 0; b < bullets.length; b++) {
-        if (
-          this.bounds.intersects(bullets[b].bounds) ||
-          bullets[b].bounds.intersects(this.bounds)
-        ) {
-          this.removeHealth(1);
-          bullets[b].visible = false;
         }
       }
     }
@@ -158,7 +164,6 @@ class Player {
           this.bounds.intersects(bullets[b].bounds) ||
           bullets[b].bounds.intersects(this.bounds)
         ) {
-          this.removeHealth(1);
           bullets[b].visible = false;
         }
       }
@@ -241,8 +246,6 @@ class Player {
     if (this.type == "Ai") {
       for (let p = 0; p < AllPlayers.length; p++) {
         for (let i = 0; i < this.health; i++) {
-          console.log(p)
-          console.log(this.sprite.imageHeart)
           ctx.drawImage(this.sprite.imageHeart, (p*250) + i * 55, 10, 55, 55);
         }
       }
@@ -279,8 +282,7 @@ class Player {
           this.bounds.intersects(bullets[b].bounds) ||
           bullets[b].bounds.intersects(this.bounds)
         ) {
-          this.removeHealth(1);
-          // bullets[b].visible = false;
+          bullets[b].visible = false;
         }
       }
     }
@@ -365,11 +367,11 @@ let Banana = new SpriteOBJ(
   "PlayBackRight.png",
   "BananaHeart.png"
 );
-
-let Ai = new Player(hotSauce, "Ai");
+let dialogSystem = new Dialog();
+let Ai = new Player(hotSauce, "Ai",250,20);
 Ai.bounds.x = 500;
-let player = new Player(Banana, "Player1");
-let player2 = new Player(guakman, "Player2");
+let player = new Player(Banana, "Player1",100,100);
+let player2 = new Player(guakman, "Player2",500,500);
 let AllPlayers = [Ai];
 let hasplayer = false;
 function pushplayer(n,b) {
@@ -417,11 +419,11 @@ function loop() {
   }
   if (mode === "singleplay") {
     ctx.save();
-    cameraFolow(player);
-
     canvas.style.visibility = "visible";
     pushplayer(player)
     world.draw();
+    dialogSystem.write("This is jude and this is a long message ");
+
     document.getElementById("menu-container").style.visibility = "hidden";
     for (let i = 0; i < AllPlayers.length; i++) {
       AllPlayers[i].draw();

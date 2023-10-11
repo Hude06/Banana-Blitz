@@ -9,23 +9,10 @@ let mode = "menu";
 let SinglePlay = document.getElementById("singleplay");
 let MultiPlay = document.getElementById("multiPlay");
 
-const goc = document.getElementById("#gameover-container"); // game over screen
+const gameover = document.getElementById("#gameover-container");
 
 let funcRUN = false;
 let Shake = false;
-class Dialog {
-  constructor() {
-    this.text = ""
-  }
-  write(text) {
-    this.text = text
-    ctx.lineWidth = 5;
-    ctx.strokeRect(500,600,600,175)
-    ctx.font = "24px serif";
-    console.log("Text Length",this.text.length)
-    ctx.fillText(this.text, 750 - this.text.length*2.5, 700);
-  }
-}
 class MapOBJ {
   constructor(src) {
     this.map = new Image();
@@ -125,16 +112,17 @@ class Player {
         this.bounds.intersects(bullets[b].bounds) ||
         bullets[b].bounds.intersects(this.bounds)
       ) {
-        bullets[b].visible = false;
-        bullets[b].bounds.y = -3000;
-        this.health -= 1;
+          if (bullets[b].visible) {
+            bullets[b].visible = false;
+            bullets[b].bounds.y = -3000;
+            this.health -= 1;
+          }
       }
     }
     if (this.type === "Player1") {
       if (this.health <= 0) {
         this.health = 0;
         // alert("Player 1 Died");
-        location.reload();
       }
       for (let p = 1; p < AllPlayers.length; p++) {
         for (let i = 0; i < this.health; i++) {
@@ -146,7 +134,6 @@ class Player {
       if (this.health <= 0) {
         this.health = 0;
         // alert("Player 2 Died");
-        location.reload();
       }
       for (let p = 1; p < AllPlayers.length; p++) {
         for (let i = 0; i < this.health; i++) {
@@ -361,7 +348,6 @@ let Banana = new SpriteOBJ(
   "PlayBackRight.png",
   "BananaHeart.png"
 );
-let dialogSystem = new Dialog();
 let Ai = new Player(hotSauce, "Ai",250,20);
 Ai.bounds.x = 500;
 let player = new Player(Banana, "Player1",100,100);
@@ -416,8 +402,6 @@ function loop() {
     canvas.style.visibility = "visible";
     pushplayer(player)
     world.draw();
-    dialogSystem.write("This is jude and this is a long message ");
-
     document.getElementById("menu-container").style.visibility = "hidden";
     for (let i = 0; i < AllPlayers.length; i++) {
       AllPlayers[i].draw();

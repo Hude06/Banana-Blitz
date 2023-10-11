@@ -101,38 +101,60 @@ class Bullet {
         this.bounds.h
       );
     }
+  }
 }
-
-class Player { 
-    constructor(SpriteOBJ, type) {
-        this.addjusterX = 0;
-        this.addjusterY = 0;
-        this.original = SpriteOBJ
-        this.sprite = SpriteOBJ
-        this.bounds = new Rect(10,10,100,100)
-        this.speed = 2;
-        this.health = 3;
-        this.direction = "left"
-        this.prevDirection = "left";
-        this.type = type;
-        this.heart = new Image();
-        this.heart.src = "./Assets/BananaHeart.png"
+class Player {
+  constructor(SpriteOBJ, type,x,y) {
+    this.addjusterX = 0;
+    this.addjusterY = 0;
+    this.original = SpriteOBJ;
+    this.sprite = SpriteOBJ;
+    this.bounds = new Rect(x, y, 100, 100);
+    this.speed = 2;
+    this.direction = "left";
+    this.prevDirection = "left";
+    this.type = type;
+    this.health = 4;
+  }
+  removeHealth(num) {
+    if (funcRUN === false) {
+      funcRUN = true;
+      setTimeout(() => {
+        this.health -= num;
+        funcRUN = false;
+      }, 100);
     }
-    draw() {
-        ctx.imageSmoothingEnabled = false;
-        // if (this.health <= 0) {
-        //     this.health = 0
-        // }
-        if (this.type === "Player1") {
-            for (let b = 0; b < bullets.length; b++) {
-                if (this.bounds.intersects(bullets[b].bounds) || bullets[b].bounds.intersects(this.bounds)) {
-                    bullets[b].visible = false;
-                    this.health -= 1                    
-                    // console.log(this.health)
-                }
-            }   
+  }
+  draw() {
+    ctx.imageSmoothingEnabled = false;
+    for (let b = 0; b < bullets.length; b++) {
+      if (
+        this.bounds.intersects(bullets[b].bounds) ||
+        bullets[b].bounds.intersects(this.bounds)
+      ) {
+        bullets[b].visible = false;
+        this.health -= 1
+      }
+    }
+    if (this.type === "Player1") {
+      if (this.health <= 0) {
+        this.health = 0;
+        alert("Player 1 Died");
+        location.reload();
+      }
+      for (let p = 1; p < AllPlayers.length; p++) {
+        for (let i = 0; i < this.health; i++) {
+          ctx.drawImage(this.sprite.imageHeart, (p*250) + i * 55, 10, 55, 55);
         }
-        console.log(this.health)
+      }
+    }
+    if (this.type === "Player2") {
+      if (this.health <= 0) {
+        this.health = 0;
+        alert("Player 2 Died");
+        location.reload();
+      }
+      for (let p = 1; p < AllPlayers.length; p++) {
         for (let i = 0; i < this.health; i++) {
           ctx.drawImage(this.sprite.imageHeart, (p*250) + i * 55, 10, 55, 55);
         }
@@ -221,26 +243,48 @@ class Player {
         bullets.push(new Bullet(this, this.direction, ""))
       }
     }
-    if ( this.type == "Ai" ) {
-            if (this.bounds.x < player.bounds.x ) {
-                this.bounds.x += 1;
-                this.direction = "right";
-            }
-            if (this.bounds.x > player.bounds.x ) {
-                this.bounds.x -= 1;
-                this.direction = "left";
-            }
-            if (this.bounds.y < player.bounds.y ) {
-                this.bounds.y += 1;
-                this.direction = "down";
-            }
-            if (this.bounds.y > player.bounds.y ) {
-                this.bounds.y -= 1;
-                this.direction = "up";
-            }
-            if (Math.floor(Math.random() * 100) === 13 ) {
-                bullets.push(new Bullet(this,this.direction))
-            }
+    if (this.type == "Ai") {
+      for (let p = 0; p < AllPlayers.length; p++) {
+        for (let i = 0; i < this.health; i++) {
+          ctx.drawImage(this.sprite.imageHeart, (p*250) + i * 55, 10, 55, 55);
+        }
+      }
+      if (this.bounds.x < player.bounds.x) {
+        this.addjusterX = 125;
+        this.addjusterY = 18;
+        this.bounds.x += 1;
+        this.direction = "right";
+      }
+      if (this.bounds.x > player.bounds.x) {
+        this.bounds.x -= 1;
+        this.addjusterX = -80;
+        this.addjusterY = 18;
+        this.direction = "left";
+      }
+      if (this.bounds.y < player.bounds.y) {
+        this.bounds.y += 1;
+        this.addjusterX = 30;
+        this.addjusterY = 125;
+        this.direction = "down";
+      }
+      if (this.bounds.y > player.bounds.y) {
+        this.bounds.y -= 1;
+        this.addjusterX = 30;
+        this.addjusterY = -90;
+        this.direction = "up";
+      }
+      if (Math.floor(Math.random() * 100) === 13) {
+        bullets.push(new Bullet(this, this.direction, 2));
+
+      }
+      for (let b = 0; b < bullets.length; b++) {
+        if (
+          this.bounds.intersects(bullets[b].bounds) ||
+          bullets[b].bounds.intersects(this.bounds)
+        ) {
+          bullets[b].visible = false;
+        }
+      }
     }
     if (this.type == "Player2") {
       if (currentKey.get("ArrowUp")) {

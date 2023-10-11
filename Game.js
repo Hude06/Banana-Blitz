@@ -9,6 +9,8 @@ let mode = "menu";
 let SinglePlay = document.getElementById("singleplay");
 let MultiPlay = document.getElementById("multiPlay");
 
+const goc = document.getElementById("#gameover-container"); // game over screen
+
 let funcRUN = false;
 let Shake = false;
 class Dialog {

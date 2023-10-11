@@ -116,15 +116,6 @@ class Player {
     this.type = type;
     this.health = 4;
   }
-  removeHealth(num) {
-    if (funcRUN === false) {
-      funcRUN = true;
-      setTimeout(() => {
-        this.health -= num;
-        funcRUN = false;
-      }, 100);
-    }
-  }
   draw() {
     ctx.imageSmoothingEnabled = false;
     for (let b = 0; b < bullets.length; b++) {
@@ -133,13 +124,14 @@ class Player {
         bullets[b].bounds.intersects(this.bounds)
       ) {
         bullets[b].visible = false;
-        this.health -= 1
+        bullets[b].bounds.y = -3000;
+        this.health -= 1;
       }
     }
     if (this.type === "Player1") {
       if (this.health <= 0) {
         this.health = 0;
-        alert("Player 1 Died");
+        // alert("Player 1 Died");
         location.reload();
       }
       for (let p = 1; p < AllPlayers.length; p++) {
@@ -151,7 +143,7 @@ class Player {
     if (this.type === "Player2") {
       if (this.health <= 0) {
         this.health = 0;
-        alert("Player 2 Died");
+        // alert("Player 2 Died");
         location.reload();
       }
       for (let p = 1; p < AllPlayers.length; p++) {

@@ -72,6 +72,7 @@ class Player {
         this.type = type;
         this.heart = new Image();
         this.heart.src = "./Assets/BananaHeart.png"
+        this.aiSpeed = 1;
     }
     draw() {
         ctx.imageSmoothingEnabled = false;
@@ -145,23 +146,27 @@ class Player {
     }
     if ( this.type == "Ai" ) {
             if (this.bounds.x < player.bounds.x ) {
-                this.bounds.x += 1;
+                this.bounds.x += this.aiSpeed;
                 this.direction = "right";
             }
             if (this.bounds.x > player.bounds.x ) {
-                this.bounds.x -= 1;
+                this.bounds.x -= this.aiSpeed;
                 this.direction = "left";
             }
             if (this.bounds.y < player.bounds.y ) {
-                this.bounds.y += 1;
+                this.bounds.y += this.aiSpeed;
                 this.direction = "down";
             }
             if (this.bounds.y > player.bounds.y ) {
-                this.bounds.y -= 1;
+                this.bounds.y -= this.aiSpeed;
                 this.direction = "up";
             }
             if (Math.floor(Math.random() * 100) === 13 ) {
                 bullets.push(new Bullet(this,this.direction))
+                this.aiSpeed = 1;
+            }
+            if (Math.floor(Math.random() * 100) === 13 ) {
+                this.aiSpeed = 1.3;
             }
     }
     if ( this.type == "Player2" ) {

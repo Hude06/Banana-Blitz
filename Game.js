@@ -11,7 +11,6 @@ let MultiPlay = document.getElementById("multiPlay");
 
 const gameover = document.getElementById("#gameover-container");
 
-let funcRUN = false;
 let Shake = false;
 class MapOBJ {
   constructor(src) {

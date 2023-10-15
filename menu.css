@@ -28,6 +28,12 @@
     border-radius: 30px;
 }
 
+.menu-container button:hover {
+    width: 44vmin;
+    height: 23vmin;
+    background-color: #ffe560;
+}
+
 .menu-container {
     text-align: center;
     border: 0px solid;

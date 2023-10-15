@@ -8,6 +8,33 @@ let navKey = new Map();
 let mode = "menu";
 let SinglePlay = document.getElementById("singleplay");
 let MultiPlay = document.getElementById("multiPlay");
+window.addEventListener("gamepadconnected", (e) => {
+  const gamepad = e.gamepad;
+  console.log(`Gamepad connected: ${gamepad.id}`);
+  console.log(gamepad)
+});
+function pollGamepad() {
+  const gamepads = navigator.getGamepads();
+  const gamepad = gamepads[0]; // Access the first gamepad
+
+  if (gamepad) {
+    // console.log("qwokriubg")
+      // Access button states
+      const buttonB = gamepad.buttons[0].pressed; // Check if button B is pressed
+      // console.log(buttonB)
+      const buttonA = gamepad.buttons[1].pressed; // Check if button A is pressed
+      // console.log(buttonA)
+
+      buttonUp = gamepad.buttons[12].pressed; // Check if button Left is pressed
+      buttonLeft = gamepad.buttons[14].pressed; // Check if button Left is pressed
+      buttonRight = gamepad.buttons[15].pressed; // Check if button Left is pressed
+      buttonDown = gamepad.buttons[13].pressed; // Check if button Left is pressed
+  }
+}
+let buttonUp = null
+let buttonLeft = null
+let buttonRight = null
+let buttonDown = null
 
 let Shake = false;
 class MapOBJ {
@@ -187,19 +214,20 @@ class Player {
   }
   update() {
     if (this.type === "Player1") {
-      if (currentKey.get("w") || currentKey.get("w")) {
+      console.log(buttonUp)
+      if (currentKey.get("w") || currentKey.get("w") || buttonUp) {
         this.bounds.y -= this.speed;
         this.addjusterX = 30;
         this.addjusterY = -50;
         this.direction = "up";
       }
-      if (currentKey.get("s") || currentKey.get("s")) {
+      if (currentKey.get("s") || currentKey.get("s") || buttonDown) {
         this.addjusterX = 30;
         this.addjusterY = 100;
         this.bounds.y += this.speed;
         this.direction = "down";
       }
-      if (currentKey.get("a") || currentKey.get("a")) {
+      if (currentKey.get("a") || currentKey.get("a") || buttonLeft) {
         this.addjusterX = -40;
         this.addjusterY = 18;
         this.bounds.x -= this.speed;
@@ -208,7 +236,7 @@ class Player {
         }
         this.direction = "left";
       }
-      if (currentKey.get("d") || currentKey.get("d")) {
+      if (currentKey.get("d") || currentKey.get("d") || buttonRight) {
         this.addjusterX = 100;
         this.addjusterY = 18;
         this.bounds.x += this.speed;
@@ -372,6 +400,7 @@ function postShake() {
 function loop() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   ctx.save();
+  pollGamepad();
   if (Shake) {
     var dx = Math.random()*15;
     var dy = Math.random()*15;

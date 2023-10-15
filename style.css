@@ -1,9 +1,5 @@
 /* Menu Css */
 
-#menu {
-    text-align: center;
-}
-
 #fullscreen {
     position: fixed;
     top: 0;
@@ -26,8 +22,8 @@ button {
 }
 
 body {
-    overflow: hidden;
-    background-color: #ffde3e;
+    background-image: url(./Assets/background.menu.jpg);
+    overflow-x: hidden;
 }
 
 canvas {

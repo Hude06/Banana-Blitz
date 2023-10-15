@@ -36,6 +36,8 @@ let buttonLeft = null
 let buttonRight = null
 let buttonDown = null
 
+const gameover = document.getElementById("#gameover-container");
+
 let Shake = false;
 class MapOBJ {
   constructor(src) {
@@ -338,6 +340,36 @@ class Player {
     this.prevDirection = "left";
   }
 }
+
+class PowerUp {
+  constructor(x, y, type){
+    this.image = new Image();
+    this.type = type;
+    this.image.src = "./Assets/PowerUps/" + this.type + ".png"
+    this.bounds = new Rect(x, y, 50 * 3, 50 * 3);
+  }
+  draw(){
+    ctx.imageSmoothingEnabled = false;
+    ctx.drawImage(this.image, this.bounds.x, this.bounds.y, this.bounds.w, this.bounds.h);
+  }
+  update(){
+    AllPlayers.forEach((playah) => {
+      if (
+        this.bounds.intersects(playah.bounds) ||
+        playah.bounds.intersects(this.bounds)
+      ) {
+          this.bounds.y = -3000;
+          if (this.type = "potassium") {
+            playah.speed++;
+          }
+          if (this.type = "healpeal") {
+            playah.health++;
+          }
+      }
+    });
+  }
+}
+
 function keyboardInit() {
   window.addEventListener("keydown", function (event) {
     currentKey.set(event.key, true);
@@ -349,6 +381,7 @@ function keyboardInit() {
   });
 }
 let bullets = [];
+let powerups = [];
 let bananaWorld = new MapOBJ("./Assets/Map.png");
 let world = new Level(bananaWorld);
 let guakman = new SpriteOBJ(
@@ -394,6 +427,10 @@ function pushplayer(n,b) {
     }
   }
 }
+function addPowerUp(x, y, type) {
+  const newPowerUp = new PowerUp(x, y, type);
+  powerups.push(newPowerUp);
+}
 function postShake() {
   ctx.restore();
 }
@@ -421,6 +458,10 @@ function loop() {
       bullets[i].draw();
       bullets[i].update();
     }
+    for (let i = 0; i < powerups.length; i++) {
+      powerups[i].draw();
+      powerups[i].update();
+    }
     navKey.clear();
   }
   if (mode === "singleplay") {
@@ -437,6 +478,10 @@ function loop() {
       bullets[i].draw();
       bullets[i].update();
     }
+    for (let i = 0; i < powerups.length; i++) {
+      powerups[i].draw();
+      powerups[i].update();
+    }
     navKey.clear();
     ctx.restore();
   }
@@ -451,6 +496,7 @@ function init() {
   MultiPlay.addEventListener("click", function () {
     mode = "multiplayer";
   });
+  addPowerUp(500, 500, "potassium");
   keyboardInit();
   loop();
 }

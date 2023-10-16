@@ -22,7 +22,7 @@ function pollGamepad() {
       // Access button states
       const buttonB = gamepad.buttons[0].pressed; // Check if button B is pressed
       // console.log(buttonB)
-      const buttonA = gamepad.buttons[1].pressed; // Check if button A is pressed
+      buttonA = gamepad.buttons[1].pressed; // Check if button A is pressed
       // console.log(buttonA)
 
       buttonUp = gamepad.buttons[12].pressed; // Check if button Left is pressed
@@ -35,6 +35,7 @@ let buttonUp = null
 let buttonLeft = null
 let buttonRight = null
 let buttonDown = null
+let buttonA = null
 
 const gameover = document.getElementById("#gameover-container");
 
@@ -247,7 +248,7 @@ class Player {
         }
         this.direction = "right";
       }
-      if (navKey.get(" ")) {
+      if (navKey.get(" ") || buttonA) {
         bullets.push(new Bullet(this, this.direction, ""))
       }
     }
@@ -340,13 +341,12 @@ class Player {
     this.prevDirection = "left";
   }
 }
-
 class PowerUp {
   constructor(x, y, type){
     this.image = new Image();
     this.type = type;
     this.image.src = "./Assets/PowerUps/" + this.type + ".png"
-    this.bounds = new Rect(x, y, 50 * 3, 50 * 3);
+    this.bounds = new Rect(x, y, 50 * 1, 50 * 1);
   }
   draw(){
     ctx.imageSmoothingEnabled = false;
@@ -369,7 +369,6 @@ class PowerUp {
     });
   }
 }
-
 function keyboardInit() {
   window.addEventListener("keydown", function (event) {
     currentKey.set(event.key, true);

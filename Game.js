@@ -50,7 +50,7 @@ class MapOBJ {
 class Level {
   constructor(map) {
     this.image = map.map
-    this.bounds = new Rect(8,1,320*5,160*5)
+    this.bounds = new Rect(135,75,320*4,160*4)
   }
   draw() {
     ctx.imageSmoothingEnabled = false
@@ -126,7 +126,7 @@ class Player {
     this.original = SpriteOBJ;
     this.sprite = SpriteOBJ;
     this.bounds = new Rect(x, y, 100, 100);
-    this.speed = 2;
+    this.speed = 2.25;
     this.direction = "left";
     this.prevDirection = "left";
     this.type = type;

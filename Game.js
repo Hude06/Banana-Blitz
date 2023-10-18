@@ -82,7 +82,7 @@ class Bullet {
       40,
       40
     );
-    this.speed = 4;
+    this.speed = 6;
     this.visible = true;
     this.direction = direction;
     this.image = new Image();
@@ -131,6 +131,8 @@ class Player {
     this.prevDirection = "left";
     this.type = type;
     this.health = 4;
+    this.ableToShoot = true;
+
   }
   draw() {
     ctx.imageSmoothingEnabled = false;
@@ -248,8 +250,17 @@ class Player {
         }
         this.direction = "right";
       }
-      if (navKey.get(" ") || buttonA) {
-        bullets.push(new Bullet(this, this.direction, ""))
+      if (this.ableToShoot) {
+        if (navKey.get(" ") || buttonA) {
+          if (this.ableToShoot) {
+            bullets.push(new Bullet(this, this.direction, ""))
+            this.ableToShoot = false;
+          }
+          setTimeout(() => {
+            this.ableToShoot = true
+          }, 200);
+          
+        }
       }
     }
     if (this.type == "Ai") {
